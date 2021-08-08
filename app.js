@@ -48,7 +48,7 @@ class Space_ships{
         this.firePower = firePower,
         this.accuracy = accuracy
     }
-    
+   
 }
 
 var USS_Schwarzenegger = new Space_ships("USS_Schwarzenegger", 20, 5, .7)
@@ -73,70 +73,66 @@ createAlienShip(6)
 //pop up message "you have 6 alien ships to distoy! You start first. Do you want to attack 1st alien ship?"
 //show the USS ship properties in the message
 console.log(alienShip)
+var playerAns = true
 var alienTurn = false
 var ussTurn = true
-var ussAttack =(alienShipDistoy) =>{
-    if (alienShip[0].hull > 0 && Math.random()<= USS_Schwarzenegger.accuracy) { //if random number less than uss accuracy, the attack success
+var ussAttack =() =>{
+    if (alienShip.length == 0) {
+        console.log("You win the game!!!")
+    }
+    else if (alienShip[0].hull > 0 && Math.random()<= USS_Schwarzenegger.accuracy && playerAns==true) { //if random number less than uss accuracy, the attack success
         console.log("hit")
         //alienShip[0].hull -= USS_Schwarzenegger.firePower  //if alien hull subtact by uss fire power
-        alienShip[0].hull -= 1
+        alienShip[0].hull -= 10   //This is for testing
         console.log(alienShip[0].hull) 
-        /*if (alienShip[0].hull >= 1) {
-            console.log("do you want to attack again?")
-            alienShip[0].hull -= 2
-            console.log(alienShip[0].hull)
-        }*/
-    } 
-     else {
+        alienTurn = false
+        ussTurn = true
+        ussAttack()
+        
+    } else if (alienShip[0].hull <= 0 && alienShip.length >= 1) {
+        console.log(alienShip[0].name + " distoy!")
+        alienShip.shift()
+        ussAttack()
+    } else {
         console.log("Miss it")//call alienAttack()
         alienTurn = true
         ussTurn = false
-        console.log(alienTurn)
+        //console.log(alienTurn)
+        alienAttack()
     }   
 }
 var alienAttack = () => {
     if (USS_Schwarzenegger.hull > 0 && Math.random()<= alienShip[0].accuracy) {
        console.log("hit") 
-       USS_Schwarzenegger.hull -= 1
+       USS_Schwarzenegger.hull -= 5 //This is for testing
        console.log(USS_Schwarzenegger.hull)
-    } else {
+        alienAttack()
+    } else if (USS_Schwarzenegger.hull <= 0) {
+        console.log("your ship distoy! Game Over")
+    }
+    else {
         console.log("Miss it")
         ussTurn= true
         alienTurn= false
+        //ask player to attack or not
+
         ussAttack()
     }
 }
-//if player answer Yes! to attack, call ussAttack()
-//ussAttack()
-//if (alienShip[0].hull >= 1) {
-    //console.log("do you want to attack again?")
-    //ussAttack()
-    //console.log(alienShip[0].hull)
-//}
-// if 
-while (alienShip[0].hull>=1 && alienTurn == false){ // while alienShip[0].hull more than 1 and user say yes to attack agint
-    console.log("do you want to attack again?")
+//if player answer Yes! to attack, (ussTurn = true) call ussAttack()
+
+while (alienShip.length >= 1 && alienShip[0].hull >= 1 && ussTurn == true && playerAns == true){ // while alienShip[0].hull more than 1 and user say yes to attack agint
+    console.log("do you want to attack " + alienShip[0].name)
     ussAttack() 
     //console.log(alienShip)
 }
-/*if (alienShip[0].hull <= 0) {
-    console.log("the alienShip distoy")
-    //alienShip.shift()
-    //console.log(alienShip)
-} */
-/*do {
-    console.log("do you want to attack again?")
-    ussAttack()
-} while (alienShip[0].hull > 1 )*/
 
-if (alienShip[0].hull <= 0) {
-    console.log("the alienShip distoy")
-}
-while (USS_Schwarzenegger.hull >= 1 && ussTurn == false){ // while alienShip[0].hull more than 1 and user say yes to attack agint
+
+while (USS_Schwarzenegger.hull >= 1 && ussTurn == false){ // while USS hull more than 1 and it is alien turn
     console.log("alien attack")
     alienAttack() 
     //console.log(alienShip)
 }
-if (USS_Schwarzenegger.hull <= 0) {
-    console.log("your ship distoy! Game Over")
-}
+
+//console.log(USS_Schwarzenegger)
+//console.log(alienShip)
