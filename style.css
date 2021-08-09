@@ -1,0 +1,24 @@
+body {
+    width: 50vw;
+    height:50vh;
+    background-size: 30%;
+    background-image: url("alienShip.jpg");
+    background-color: #cccccc;
+    background-position: center;
+    /*background-repeat: space;*/
+}
+.button {
+    margin: 0 auto;
+    display: block;
+    width: 100vw;
+    height: 50px;
+    text-align:center;
+    color: red;
+    font-size: 25px;
+    background-color: rgb(233, 218, 218);
+    
+}
+.button:hover{
+    background-color: rgb(5, 52, 141);
+    color: wheat;
+}
