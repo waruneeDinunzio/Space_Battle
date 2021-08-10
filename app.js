@@ -36,24 +36,23 @@ If the value is greater than `0.8` then the attack has missed.
 * accuracy - between `.6` and `.8` 
 You could be battling six alien ships each with unique values. 
 Example use of **accuracy** to determine a hit: ```javascript if (Math.random() < alien[0].accuracy) { console.log('You have been hit!'); } 
-
 */
+
 window.addEventListener("load", (event) => {
-//create space ships class with name, hull, fire power and accuracy   
-class Space_ships{
-    constructor(name, hull, firePower, accuracy){
-        this.name = name,
-        this.hull = hull,
-        this.firePower = firePower,
-        this.accuracy = accuracy
+//create space ships class with name, hull, fire power and accuracy as properties 
+    class Space_ships{
+        constructor(name, hull, firePower, accuracy){
+            this.name = name,
+            this.hull = hull,
+            this.firePower = firePower,
+            this.accuracy = accuracy
+        }
     }
-   
-}
-
+//create the you space ship name USS Schwarzenegger, hull is 20, fire power is 5 and accuracy rate is .7
 var USS_Schwarzenegger = new Space_ships("USS_Schwarzenegger", 20, 5, .7)
-//console.log(USS_Schwarzenegger)
-var alienShip = [] //create empty array of alien ship
-
+//create empty array of alien ship
+var alienShip = [] 
+//create function to create mulitple alien ships
 createAlienShip = (numOfShips) => { 
     for (let i=0; i <= numOfShips-1; i++) { //use for..loop to create array of 6 objects
         var hull = Math.floor(Math.random() * (7 - 3)) + 3  //hull - random number between `3` and `6`
@@ -67,54 +66,36 @@ createAlienShip = (numOfShips) => {
         alienShip.pop() //if yes, take the duplicate index out
     }
 }
-//ask user do you want to play the game
 
-//if user click yes to play, call the createAlianShip()
-//createAlienShip(6)
 //pop up message "you have 6 alien ships to distoy! You start first. Do you want to attack 1st alien ship?"
 //show the USS ship properties in the message
-//document.getElementById("demo").innerHTML= alienShip[0]
-
-//var playerAns = false
 var alienTurn = false
 var ussTurn = true
 var ussAttack =() =>{
-    /*if (alienShip.length == 0) { //check is any alien ship in the array if it's not you win the game
-        alert("You win the game!!!")
-        alienTurn = false
-    } */
+    //if alien ship is a last ship of alienShip array and alienship still has hull and 
+    //if random number less than uss accuracy, the attack success
     if (alienShip.length == 1 && alienShip[0].hull > 0 && Math.random()<= USS_Schwarzenegger.accuracy){
-        alienShip[0].hull -= 10
+        alienShip[0].hull -= USS_Schwarzenegger.firePower  //alien hull subtact by uss fire power
+        //alienShip[0].hull -= 10
         alert("Hit the targer, " + alienShip[0].name + " !")
         if(alienShip[0].hull <=0){
             alert("You win the game!!!") 
-            alienTurn = false 
+            alienTurn = false //end the loop
         } else {
             alert(alienShip[0].name + " has " + alienShip[0].hull+ " hull left. Do you want to keep attacking?")
             ussAttack()
         }
-    } /*else{
-        alert(alienShip[0].name + " has " + alienShip[0].hull + " left")
-        
-            if (confirm("Do you want to keep attacking?")) {
-                ussAttack()
-            } else {
-                alert("Alien ships get away. Game Over!!")
-            }
-    }*/
-    else if(alienShip.length > 1 && alienShip[0].hull > 0 && Math.random()<= USS_Schwarzenegger.accuracy) { //if random number less than uss accuracy, the attack success
-        //alienShip[0].hull -= USS_Schwarzenegger.firePower  //alien hull subtact by uss fire power
-        alienShip[0].hull -= 10   //This is for testing
+    } else if(alienShip.length > 1 && alienShip[0].hull > 0 && Math.random()<= USS_Schwarzenegger.accuracy) { //if random number less than uss accuracy, the attack success
+        alienShip[0].hull -= USS_Schwarzenegger.firePower  //alien hull subtact by uss fire power
+        //alienShip[0].hull -= 10   //This is for testing
         alert("Hit the targer!")
         alienTurn = false
         ussTurn = true
-        //if (alienShip[0].hull <= 0 && alienShip.length ==1) {
-            //alert("You destroyed last Alien ship! You win the game!!")
-        //}
+        
         if (alienShip[0].hull <= 0 && alienShip.length >= 1) {
             alert(alienShip[0].name + " destroyed!")
             alienShip.shift()
-            if (confirm("Do you want to keep attacking?")) {
+            if (confirm("Do you want to keep attacking? click OK to attack or Cancel to retreat")) {
                 ussAttack()
             } else {
                 alert("Alien ships get away. Game Over!!")
@@ -122,86 +103,60 @@ var ussAttack =() =>{
         } else { 
             alert(alienShip[0].name + " has " + alienShip[0].hull+ " hull left. Do you want to keep attacking?")
             ussAttack()
-        }
-        
-    /*} else if (alienShip[0].hull <= 0 && alienShip.length >= 1) {
-        alert(alienShip[0].name + " destroyed!")
-        alienShip.shift()
-        if (confirm("Do you want to keep attacking?")) {
-            ussAttack()
-        } else {
-            alert("Alien ships get away. Game Over!!")
-        }*/
-    }
-    
-    else {
-        window.alert("Miss it! Get ready...Alien ship attack!")//call alienAttack()
+        }   
+    } else {
+        window.alert("Miss it! Get ready...Alien ship attack!")//if miss, alien turn and call alienAttack function
         alienTurn = true
         ussTurn = false
-        //console.log(alienTurn)
         alienAttack()
     }   
 }
 var alienAttack = () => {
     if (USS_Schwarzenegger.hull > 0 && alienTurn == true && Math.random()<= alienShip[0].accuracy) {
        alert("You get hit") 
-       USS_Schwarzenegger.hull -= 3 //This is for testing
+       USS_Schwarzenegger.hull -= alienShip[0].firePower
+       //USS_Schwarzenegger.hull -= 3 //This is for testing
        alienTurn = true
-       //console.log(USS_Schwarzenegger.hull)
-        if(USS_Schwarzenegger.hull > 0 && alienTurn== true) {
-            alert("Alien attach again!")
+        if(USS_Schwarzenegger.hull > 0 && alienTurn == true) {
+            alert("you have "+ USS_Schwarzenegger.hull+ " hull remain! Alien attach again!")
             alienAttack()
         } else {
         alert("your ship destroyed! Game Over")
         }
-    }
-    else {
+    } else {
         window.alert("Alien attacks and Miss it!!Now your turn")
         ussTurn= true
         alienTurn= false
         //ask player to attack or not
-        if (confirm("Do you want to attack?")) {
+        if (confirm("Do you want to keep attacking? click OK to attack or Cancel to retreat")) {
             ussAttack()
         } else {
             alert("Alien ships get away. Game Over!!")
         }
     }
 }
-//if player answer Yes! to attack, (ussTurn = true) call ussAttack()
 
-/*while (alienShip.length >= 1 && alienShip[0].hull >= 1 && ussTurn == true && playerAns == true){ // while alienShip[0].hull more than 1 and user say yes to attack agint
-    alert("do you want to attack " + alienShip[0].name)
-    ussAttack() 
-    //console.log(alienShip)
-}*/
-
-
-/*while (USS_Schwarzenegger.hull >= 1 && alienTurn == true){ // while USS hull more than 1 and it is alien turn
-    alert("alien attack")
-    alienAttack() 
-    //console.log(alienShip)
-}*/
-
-//console.log(USS_Schwarzenegger)
-//console.log(alienShip)
-
-
+//create function to start the game
 var startGame = () => {
     alert("Alert!!! We detected Romulan ships in Federation territory approaching us with vessel ready to attack!")
+//if player answer Yes! to attack 1st alien ship, call ussAttack function
     if (confirm("Shield Up! you have 6 alien ships to distoy! You start first. Do you want to attack 1st alien ship?")) {
+        //to reset USS_Schwarzenegger's value to the state when it's first created
         if(USS_Schwarzenegger){
-        USS_Schwarzenegger.name ="USS_Schwarzenegger",
-        USS_Schwarzenegger.hull = 20,
-        USS_Schwarzenegger.firePower = 5,
-        USS_Schwarzenegger.accuracy = .7
-        alienShip = []
+            USS_Schwarzenegger.name ="USS_Schwarzenegger"
+            USS_Schwarzenegger.hull = 20
+            USS_Schwarzenegger.firePower = 5
+            USS_Schwarzenegger.accuracy = .7
+            alienShip = []
         }
-    createAlienShip(6)
-        //playerAns= true
-    ussAttack()
-} else {
-    alert("They attack us, You die!! Game Over!!")
-}
+        alert("You are " + USS_Schwarzenegger.name+ " and has "+ USS_Schwarzenegger.hull + " hull , "+ USS_Schwarzenegger.firePower+ " fire Power, "+
+        USS_Schwarzenegger.accuracy+ " accuracy rate! ready to ATTACK!")
+        createAlienShip(6) //call createAlienShip function
+        //alert(alienShip[0].firePower)//for testing
+        ussAttack() //call ussAttack function to start the game
+    } else {
+        alert("They attack us, You die!! Game Over!!")
+    }
 
 }
 document.getElementById("startGame").addEventListener("click",startGame)
